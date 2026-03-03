@@ -1,0 +1,58 @@
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || k == 1) return head;
+
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+
+        ListNode prevGroupEnd = dummy;
+        ListNode curr = head;
+
+        while (true) {
+            // Find the end of the current k-group
+            ListNode kth = getKthNode(curr, k);
+            if (kth == null) break; // Not enough nodes left
+
+            ListNode nextGroupStart = kth.next;
+
+            // Reverse this k-group
+            ListNode prev = nextGroupStart;
+            ListNode node = curr;
+
+            while (node != nextGroupStart) {
+                ListNode temp = node.next;
+                node.next = prev;
+                prev = node;
+                node = temp;
+            }
+
+            // Connect reversed group
+            prevGroupEnd.next = kth;
+            prevGroupEnd = curr;
+            curr = nextGroupStart;
+        }
+
+        return dummy.next;
+    }
+
+    private ListNode getKthNode(ListNode start, int k) {
+        while (start != null && k > 1) {
+            start = start.next;
+            k--;
+        }
+        return start;
+    }
+}
+output
+Accepted
+Runtime: 1 ms
+Case 1
+Case 2
+Case 3
+Input
+lists =
+[[1,4,5],[1,3,4],[2,6]]
+Output
+[1,1,2,3,4,4,5,6]
+Expected
+[1,1,2,3,4,4,5,6]
